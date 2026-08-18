@@ -24,14 +24,28 @@ jobs:
           load: true
           tags: ${{ secrets.DOCKER_USERNAME }}/myapp:latest
 
-      - name: Export image to tar
+      # ========== 导出你的业务镜像 myapp ==========
+      - name: Export myapp image to tar
         run: |
           docker save -o myapp.tar ${{ secrets.DOCKER_USERNAME }}/myapp:latest
-      - name: Upload artifact
+      - name: Upload myapp artifact
         uses: actions/upload-artifact@v4
         with:
           name: myapp-image
           path: myapp.tar
+
+      # ========== 新增：拉取并导出 python:3.10-slim ==========
+      - name: Pull python:3.10-slim
+        run: |
+          docker pull python:3.10-slim
+      - name: Export python slim image to tar
+        run: |
+          docker save -o python-slim.tar python:3.10-slim
+      - name: Upload python-slim artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-slim-image
+          path: python-slim.tar
 
   deploy:
     needs: build
