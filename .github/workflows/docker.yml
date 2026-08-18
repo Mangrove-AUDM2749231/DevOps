@@ -21,11 +21,12 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          load: true
           tags: ${{ secrets.DOCKER_USERNAME }}/myapp:latest
 
       - name: Export image to tar
         run: |
-          docker save -o myapp.tar myapp:latest
+          docker save -o myapp.tar ${{ secrets.DOCKER_USERNAME }}/myapp:latest
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
